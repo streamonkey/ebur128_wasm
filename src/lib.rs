@@ -34,7 +34,7 @@ pub fn ebur128_integrated_stereo(sample_rate : u32, left : &[f32], right : &[f32
 }
 
 #[wasm_bindgen]
-pub fn ebur128_true_peak_mono(sample_rate : u32, samples : &[f32]) -> f64 {
+pub fn ebur128_true_peak_mono(sample_rate : u32, samples : &[f32]) -> f32 {
     set_panic_hook();
     let channels = 1;
 
@@ -42,12 +42,14 @@ pub fn ebur128_true_peak_mono(sample_rate : u32, samples : &[f32]) -> f64 {
 
     let an = analyzer::setup_analyzer(sample_rate, channels, data, Mode::TRUE_PEAK);
 
-    an.true_peak(0).unwrap_or_else(|_| panic!("Error getting loudness"))
+    let peak = an.true_peak(0).unwrap_or_else(|_| panic!("Error getting loudness"));
+
+    20.0 * peak.log10() as f32
 }
 
 // Returns the true peak of both channels in a list
 #[wasm_bindgen]
-pub fn ebur128_true_peak_stereo(sample_rate : u32, left : &[f32], right : &[f32]) -> Vec<f64> {
+pub fn ebur128_true_peak_stereo(sample_rate : u32, left : &[f32], right : &[f32]) -> f32 {
     set_panic_hook();
     if left.len() != right.len() {
         panic!("left and right channel must have the same length");
@@ -59,8 +61,10 @@ pub fn ebur128_true_peak_stereo(sample_rate : u32, left : &[f32], right : &[f32]
 
     let an = analyzer::setup_analyzer(sample_rate, channels, data, Mode::TRUE_PEAK);
 
-    let left_peak = an.true_peak(0).unwrap_or_else(|_| panic!("Error getting loudness"));
-    let right_peak = an.true_peak(1).unwrap_or_else(|_| panic!("Error getting loudness"));
+    let left_peak = an.true_peak(0).unwrap_or_else(|_| panic!("Error getting true peak"));
+    let right_peak = an.true_peak(1).unwrap_or_else(|_| panic!("Error getting true peak"));
 
-    return vec![left_peak, right_peak];
+    let maxpeak = f64::max(left_peak, right_peak);
+
+    20.0 * maxpeak.log10() as f32
 }

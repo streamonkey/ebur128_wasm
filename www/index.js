@@ -53,13 +53,12 @@ fileIn.addEventListener("change", async () => {
 
     if (channels.length == 1) {
         truePeak = wasm.ebur128_true_peak_mono(audioBuffer.sampleRate, channels[0])
-        const peakEnd = Date.now()
-        truePeakOut.innerText = `${truePeak.toFixed(2)} dBTP (took ${(peakEnd - peakStart).toFixed(2)}ms)`
     } else if (channels.length == 2) {
         truePeak = wasm.ebur128_true_peak_stereo(audioBuffer.sampleRate, channels[0], channels[1])
-        const peakEnd = Date.now()
-        truePeakOut.innerText = `left: ${truePeak[0].toFixed(2)} dbTP, right: ${truePeak[1].toFixed(2)} (took ${(peakEnd - peakStart).toFixed(2)}ms)`
     }
+    const peakEnd = Date.now()
+
+    truePeakOut.innerText = `${truePeak.toFixed(2)} dBTP (took ${(peakEnd - peakStart).toFixed(2)}ms)`
 })
 
 const createArray = (length, fn) => {
