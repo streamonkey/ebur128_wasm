@@ -2,6 +2,9 @@
 
 This Package bundles [the ebur128 Rust crate](https://crates.io/crates/ebur128) as compiled WASM, so it can be used in the browser.
 
+* v1.x.x is compatible with webpack style bundlers
+* v2.x.x is compatible for use without bundlers (plain JS/HTML or [the Vite builder](https://vitejs.dev/))
+
 the calls are blocking and take some time to execute, calling this from a WebWorker is advised for best UX.
 
 currently the following methods are exposed:
@@ -44,9 +47,9 @@ see [./www/index.js](./www/index.js) for a demo usage
 you can play with the features in a local demo app:
 
 ```bash
-wasm-pack build
+make
 cd www
-npm run start # goto http://localhost:8080/
+npm run start # goto http://localhost:3000/
 ```
 
 ## License

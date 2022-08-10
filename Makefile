@@ -1,0 +1,3 @@
+build-wasm:
+	rm -rf pkg
+	wasm-pack build --target web

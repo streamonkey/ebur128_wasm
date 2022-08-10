@@ -1,9 +1,11 @@
 [package]
 name = "ebur128-wasm"
-version = "1.0.2"
+version = "2.0.1"
 authors = ["Wilhelm Bartel <wilhelm.bartel@streamonkey.de>"]
 edition = "2021"
 repository = "https://github.com/streamonkey/ebur128_wasm"
+description = "EBU R128 Audio Loudness in WebAssembly"
+license = "Apache-2.0"
 
 [lib]
 crate-type = ["cdylib", "rlib"]

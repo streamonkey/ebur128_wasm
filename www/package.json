@@ -3,15 +3,9 @@
   "version": "0.1.0",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --config webpack.config.js",
-    "start": "webpack-dev-server"
+    "start": "serve"
   },
-  "devDependencies": {
-    "hello-wasm-pack": "^0.1.0",
-    "webpack": "^4.29.3",
-    "webpack-cli": "^3.1.0",
-    "webpack-dev-server": "^3.1.5",
-    "copy-webpack-plugin": "^5.0.0",
-    "ebur128-wasm": "file:../pkg"
+  "dependencies": {
+    "serve": "^14.0.1"
   }
 }

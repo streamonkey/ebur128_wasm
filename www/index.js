@@ -1,4 +1,4 @@
-import * as wasm from "ebur128-wasm"
+import * as wasm from "./pkg/ebur128_wasm.js"
 
 /**
  * @type {HTMLInputElement}
@@ -68,3 +68,7 @@ const createArray = (length, fn) => {
 const getChannels = (buf) => {
     return createArray(buf.numberOfChannels, i => buf.getChannelData(i))
 }
+
+wasm.default().then(() => {
+    alert("wasm loaded")
+})
