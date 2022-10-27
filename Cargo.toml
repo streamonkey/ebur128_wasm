@@ -1,6 +1,6 @@
 [package]
 name = "ebur128-wasm"
-version = "2.0.1"
+version = "2.0.2"
 authors = ["Wilhelm Bartel <wilhelm.bartel@streamonkey.de>"]
 edition = "2021"
 repository = "https://github.com/streamonkey/ebur128_wasm"
