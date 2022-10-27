@@ -3,7 +3,8 @@
 This Package bundles [the ebur128 Rust crate](https://crates.io/crates/ebur128) as compiled WASM, so it can be used in the browser.
 
 * v1.x.x is compatible with webpack style bundlers
-* v2.x.x is compatible for use without bundlers (plain JS/HTML or [the Vite builder](https://vitejs.dev/))
+* v2.x.x is compatible for use without bundlers (plain JS/HTML or [the old Vite bundler](https://vitejs.dev/))
+* v3.x.x is compatible with the new Vite bundler and webpack 
 
 the calls are blocking and take some time to execute, calling this from a WebWorker is advised for best UX.
 
