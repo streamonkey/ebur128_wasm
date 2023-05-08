@@ -1,3 +1,2 @@
 build-wasm:
-	rm -rf pkg
-	wasm-pack build --target bundler
+	wasm-pack build ./ebur128-crate --target web

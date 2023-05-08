@@ -1,6 +1,6 @@
 [package]
-name = "ebur128-wasm"
-version = "3.0.0"
+name = "ebur128-crate"
+version = "0.0.0"
 authors = ["Wilhelm Bartel <wilhelm.bartel@streamonkey.de>"]
 edition = "2021"
 repository = "https://github.com/streamonkey/ebur128_wasm"
