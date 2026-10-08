@@ -24,7 +24,11 @@ export class LoudnessMeter {
         })
     }
 
-    private async sendToWorker(task: InputData["task"], buffer: AudioBuffer) {
+    private async sendToWorker<T extends OutputData["result"]>(
+        task: InputData["task"],
+        buffer: AudioBuffer,
+        stepMs?: number
+    ) {
         const channels = getChannels(buffer)
 
         await this.ready
@@ -35,14 +39,14 @@ export class LoudnessMeter {
 
         const backchannel = new MessageChannel()
 
-        return new Promise<number>((resolve, _) => {
+        return new Promise<T>((resolve, _) => {
             backchannel.port1.addEventListener(
                 "message",
                 e => {
                     const data = e.data as OutputData
 
                     backchannel.port1.close()
-                    resolve(data.result)
+                    resolve(data.result as T)
                 },
                 { once: true }
             )
@@ -50,7 +54,8 @@ export class LoudnessMeter {
             const message: InputData = {
                 task: task,
                 samplerate: buffer.sampleRate,
-                channelData: channels
+                channelData: channels,
+                stepMs
             }
 
             backchannel.port1.start()
@@ -60,10 +65,22 @@ export class LoudnessMeter {
     }
 
     loudnessIntegrated = async (buffer: AudioBuffer) => {
-        return await this.sendToWorker("loudnessIntegrated", buffer)
+        return await this.sendToWorker<number>("loudnessIntegrated", buffer)
     }
 
     truePeak = async (buffer: AudioBuffer) => {
-        return await this.sendToWorker("truePeak", buffer)
+        return await this.sendToWorker<number>("truePeak", buffer)
+    }
+
+    /**
+     * short-term loudness (LUFS) at the end of each step of stepMs and the true peak (dBTP) within it,
+     * interleaved as [lufs_0, peak_db_0, lufs_1, peak_db_1, ...]
+     * -Infinity marks silence; during the first 3 s the window is padded with silence, so these values read low
+     */
+    shortTerm = async (buffer: AudioBuffer, stepMs: number) => {
+        if (!Number.isInteger(stepMs) || stepMs < 1 || stepMs > 0xffffffff) {
+            throw new RangeError("stepMs must be a positive 32-bit integer")
+        }
+        return await this.sendToWorker<Float64Array>("shortTerm", buffer, stepMs)
     }
 }

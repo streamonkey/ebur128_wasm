@@ -78,3 +78,27 @@ pub fn ebur128_true_peak_stereo(sample_rate: u32, left: &[f32], right: &[f32]) -
 
     20.0 * maxpeak.log10() as f32
 }
+
+// Short-term loudness and true peak per step of step_ms, see README.md
+#[wasm_bindgen]
+pub fn ebur128_short_term_mono(sample_rate: u32, samples: &[f32], step_ms: u32) -> Vec<f64> {
+    set_panic_hook();
+
+    analyzer::short_term_steps(sample_rate, &[samples], step_ms)
+}
+
+// Short-term loudness and true peak per step of step_ms, see README.md
+#[wasm_bindgen]
+pub fn ebur128_short_term_stereo(
+    sample_rate: u32,
+    left: &[f32],
+    right: &[f32],
+    step_ms: u32,
+) -> Vec<f64> {
+    set_panic_hook();
+    if left.len() != right.len() {
+        panic!("left and right channel must have the same length");
+    }
+
+    analyzer::short_term_steps(sample_rate, &[left, right], step_ms)
+}

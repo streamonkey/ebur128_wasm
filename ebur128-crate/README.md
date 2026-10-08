@@ -37,9 +37,33 @@ export function ebur128_true_peak_mono(sample_rate: number, samples: Float32Arra
 * @returns {Float64Array}
 */
 export function ebur128_true_peak_stereo(sample_rate: number, left: Float32Array, right: Float32Array): Float64Array;
+/**
+* @param {number} sample_rate
+* @param {Float32Array} samples
+* @param {number} step_ms
+* @returns {Float64Array}
+*/
+export function ebur128_short_term_mono(sample_rate: number, samples: Float32Array, step_ms: number): Float64Array;
+/**
+* @param {number} sample_rate
+* @param {Float32Array} left
+* @param {Float32Array} right
+* @param {number} step_ms
+* @returns {Float64Array}
+*/
+export function ebur128_short_term_stereo(sample_rate: number, left: Float32Array, right: Float32Array, step_ms: number): Float64Array;
 ```
 
 these methods correspond to the EBU R128 defined [Loudness Normalization functions](https://tech.ebu.ch/docs/r/r128.pdf) 
+
+### Short-term loudness over time
+
+`ebur128_short_term_mono` and `ebur128_short_term_stereo` analyse the audio in consecutive steps of `step_ms`, the last step may be partial. For each step they return two values, interleaved as `[lufs_0, peak_db_0, lufs_1, peak_db_1, ...]`:
+
+* `lufs_i`: the short-term loudness (3 s window) at the end of step i in LUFS, `-Infinity` when silent. During the first 3 s the window is padded with silence, so these values read low.
+* `peak_db_i`: the true peak within step i over all channels in dBTP, `-Infinity` for digital silence.
+
+They panic if `step_ms` covers less than one frame or if the stereo channels differ in length.
 
 see [./www/index.js](./www/index.js) for a demo usage
 
